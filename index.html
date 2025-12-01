@@ -11,11 +11,14 @@ body {
   font-family: Arial, sans-serif;
   background: #f4f4f9;
   color: #333;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* --- Top Black Bar --- */
 nav {
-  background: #000;     /* black bar */
+  background: #000;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -30,7 +33,7 @@ nav .logo {
   color: white;
 }
 
-/* --- Buttons (Your copied hover effects) --- */
+/* --- Buttons (Your hover effects) --- */
 nav a {
   display: inline-block;
   padding: 10px 18px;
@@ -49,16 +52,17 @@ nav a:hover {
   transform: translateY(-2px);
 }
 
-/* Optional active button */
-nav a.active {
-  background: #005bb5;
-  color: white;
+/* --- Center Container --- */
+.center-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* --- Island Section --- */
 .island {
   max-width: 600px;
-  margin: 80px auto;
   background: white;
   padding: 40px;
   border-radius: 20px;
@@ -88,15 +92,11 @@ nav a.active {
   </div>
 </nav>
 
-<!-- MAIN PAGE CONTENT -->
-<div style="padding: 120px 30px; text-align: center;">
-  <h1>Welcome to the site!</h1>
-  <p>Your website layout is ready.</p>
-</div>
-
-<!-- ISLAND SECTION -->
-<div class="island">
-  <h2>Welcome to Danny's Doggo</h2>
+<!-- FULLY CENTERED ISLAND -->
+<div class="center-wrapper">
+  <div class="island">
+    <h2>Welcome to Danny's Doggo</h2>
+  </div>
 </div>
 
 </body>
