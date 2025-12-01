@@ -60,20 +60,26 @@ nav a:hover {
   align-items: center;
 }
 
-/* --- Island Section --- */
+/* --- GLASS BLACK ISLAND --- */
 .island {
   max-width: 600px;
-  background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
   text-align: center;
+
+  background: rgba(0, 0, 0, 0.55);      /* black but transparent */
+  color: white;                         /* text stays white */
+  box-shadow: 0px 8px 25px rgba(0,0,0,0.4);
+
+  backdrop-filter: blur(12px);          /* GLASS EFFECT */
+  -webkit-backdrop-filter: blur(12px);  /* Safari support */
+
+  border: 1px solid rgba(255, 255, 255, 0.15); /* subtle border */
 }
 
 .island h2 {
   margin: 0;
   font-size: 2rem;
-  color: #333;
   font-weight: bold;
 }
 
@@ -92,7 +98,7 @@ nav a:hover {
   </div>
 </nav>
 
-<!-- FULLY CENTERED ISLAND -->
+<!-- CENTERED GLASS ISLAND -->
 <div class="center-wrapper">
   <div class="island">
     <h2>Welcome to Danny's Doggo</h2>
