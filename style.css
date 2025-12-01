@@ -1,0 +1,78 @@
+/* Background so glass blur works */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* Soft gradient background so blur effect is visible */
+  background: linear-gradient(135deg, #d9e0ff, #b8c4ff, #9fb3ff);
+}
+
+/* Top Black Bar */
+nav {
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+}
+
+nav .logo {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Buttons with your original hover effect */
+nav a {
+  display: inline-block;
+  padding: 10px 18px;
+  margin-left: 10px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 25px;
+  text-decoration: none;
+  background: white;
+  color: #0073e6;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* Centering container */
+.center-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* GLASS BLACK ISLAND */
+.island {
+  padding: 40px;
+  max-width: 600px;
+  text-align: center;
+  border-radius: 20px;
+
+  /* Black glass with transparency */
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+
+  /* Real glass blur */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Subtle border + shadow */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.island h2 {
+  margin: 0;
+  font-size: 2rem;
+}
