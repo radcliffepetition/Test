@@ -3,11 +3,8 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  /* Soft gradient background so blur effect is visible */
   background: linear-gradient(135deg, #d9e0ff, #b8c4ff, #9fb3ff);
+  position: relative;
 }
 
 /* Top Black Bar */
@@ -18,6 +15,11 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 12px 25px;
+  position: fixed;  /* navbar stays at top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 
 nav .logo {
@@ -44,34 +46,28 @@ nav a:hover {
   transform: translateY(-2px);
 }
 
-/* Center container for the island, near top */
-.center-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;    /* horizontal center */
-  align-items: flex-start;    /* move to top */
-  padding-top: 30px;          /* space below navbar */
-}
-
-/* GLASS BLACK ISLAND */
+/* Centered island positioned below navbar */
 .island {
+  position: absolute;      /* absolute position */
+  top: 70px;               /* distance from top of viewport (navbar height + padding) */
+  left: 50%;               /* horizontal center */
+  transform: translateX(-50%); /* center horizontally */
+  
   padding: 40px;
   max-width: 600px;
   width: 80%;
   text-align: center;
   border-radius: 20px;
 
-  /* Black glass with transparency */
+  /* Glass black */
   background: rgba(0, 0, 0, 0.45);
   color: white;
-
-  /* Real glass blur */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  /* Subtle border + shadow */
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  z-index: 5;
 }
 
 .island h2 {
