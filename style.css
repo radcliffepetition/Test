@@ -1,10 +1,11 @@
-/* Background */
+/* GLOBAL FONT */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: "Orbitron", sans-serif;
   background: linear-gradient(135deg, #d9e0ff, #b8c4ff, #9fb3ff);
   height: 100vh;
   position: relative;
+  overflow-x: hidden;
 }
 
 /* NAVBAR */
@@ -18,28 +19,26 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 20;
+  z-index: 50;
 }
 
-/* Group logo + dropdown */
 .left-group {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-/* Logo text */
+/* LOGO */
 .logo {
   font-size: 1.3rem;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* DROPDOWN BUTTON */
+/* DROPDOWN BUTTON (label) */
 .dropbtn {
   background: white;
   color: #0073e6;
   padding: 10px 18px;
-  border: none;
   border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
@@ -51,54 +50,57 @@ nav {
   transform: translateY(-2px);
 }
 
-/* DROPDOWN MENU */
-.dropdown {
-  position: relative;
+/* HIDE CHECKBOX */
+#menu-toggle {
+  display: none;
 }
 
-.dropdown-content {
-  position: absolute;
-  top: 50px;
+/* FULLSCREEN DROPDOWN MENU */
+.fullscreen-dropdown {
+  position: fixed;
+  top: 0;
   left: 0;
-  background: rgba(0,0,0,0.85);
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  min-width: 140px;
-  border-radius: 10px;
-  overflow: hidden;
 
-  /* Start hidden */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
   opacity: 0;
-  transform: translateY(-10px);
   pointer-events: none;
+  transform: translateY(-20px);
+  transition: all 0.35s ease;
 
-  /* Smooth animation */
-  transition: all 0.25s ease;
+  z-index: 40;
 }
 
-/* Show dropdown when button is clicked (JS-free trick using :focus) */
-.dropbtn:focus + .dropdown-content,
-.dropdown-content:hover {
+/* SHOW DROPDOWN WHEN CHECKED */
+#menu-toggle:checked ~ .fullscreen-dropdown {
   opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
+  transform: translateY(0);
 }
 
-/* Dropdown links */
-.dropdown-content a {
-  padding: 12px 15px;
-  display: block;
-  text-decoration: none;
+/* DROPDOWN LINKS */
+.fullscreen-dropdown a {
   color: white;
-  font-size: 0.95rem;
-  transition: background 0.2s;
+  font-size: 2rem;
+  text-decoration: none;
+  padding: 20px;
+  transition: color 0.2s;
 }
 
-.dropdown-content a:hover {
-  background: rgba(255,255,255,0.15);
+.fullscreen-dropdown a:hover {
+  color: #66aaff;
 }
 
-/* --- ISLAND --- */
+/* GLASS ISLAND */
 .island {
   position: absolute;
   top: 90px;
