@@ -55,10 +55,10 @@ nav {
 /* === SLIDING DROPDOWN MENU === */
 .dropdown-menu {
   position: fixed;
-  top: -50vh; /* hidden above screen */
+  top: -50vh;
   left: 0;
   width: 100%;
-  height: 50vh; /* covers half the screen */
+  height: 50vh;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(15px);
   box-shadow: 0 5px 20px rgba(0,0,0,0.4);
@@ -72,43 +72,76 @@ nav {
 }
 
 .dropdown-menu.open {
-  top: 60px; /* slides down under navbar */
+  top: 60px;
 }
 
-/* === GLASS ISLAND === */
-.island {
-  position: absolute;
-  top: 84px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(90%, 680px);
-  padding: 36px;
+/* === FULL SCREEN SECTIONS === */
+.page-section {
+  height: 100vh;
+  width: 100%;
+  padding-top: 100px; /* Avoid overlap with navbar */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  border-radius: 18px;
+}
 
+/* Welcome section styling */
+.section-welcome {
+  background: #0a58ca;
+  color: white;
+}
+
+.section-welcome h1 {
+  font-size: 4rem;
+}
+
+/* About section styling */
+.section-about {
+  background: white;
+  color: #071f47;
+}
+
+.section-about h1 {
+  font-size: 3.5rem;
+}
+
+.about-text {
+  font-size: 1.2rem;
+  margin-top: 20px;
+  max-width: 700px;
+}
+
+/* Credits section styling */
+.section-credits {
   background: #071f47;
   color: white;
-
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-  z-index: 30;
 }
 
-.island h2 {
-  margin: 0;
-  font-size: clamp(1.25rem, 2.5vw, 2rem);
-  font-weight: 700;
+.section-credits p {
+  font-size: 2rem;
 }
 
 /* === MOBILE === */
 @media (max-width: 520px) {
+
   .dropdown-button {
     padding: 8px 12px;
     font-size: 0.95rem;
   }
-  .island {
-    padding: 28px;
-    top: 78px;
+
+  .section-welcome h1,
+  .section-about h1 {
+    font-size: 2.5rem;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+
+  .section-credits p {
+    font-size: 1.5rem;
   }
 }
