@@ -75,6 +75,68 @@ nav {
   top: 60px; /* slides down under navbar */
 }
 
+/* FULLSCREEN DROPDOWN */
+.fullscreen-dropdown {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform: translateY(-100%);
+  transition: transform 0.35s ease;
+}
+
+/* OPEN STATE */
+#menu-toggle:checked + .fullscreen-dropdown {
+  transform: translateY(0);
+}
+
+/* BUTTON WRAPPER */
+.menu-buttons {
+  width: 90%;
+  max-width: 900px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  transform: translateY(-40px);
+  opacity: 0;
+  transition: 0.4s ease;
+}
+
+/* Animate buttons AFTER panel opens */
+#menu-toggle:checked + .fullscreen-dropdown .menu-buttons {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* BIG BUTTONS */
+.big-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 50px;
+  border-radius: 18px;
+
+  font-size: 28px;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  text-align: center;
+
+  backdrop-filter: blur(12px);
+  transition: 0.2s ease;
+}
+
+.big-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.01);
+}
+
 /* === GLASS ISLAND === */
 .island {
   position: absolute;
