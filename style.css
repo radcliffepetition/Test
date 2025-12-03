@@ -6,7 +6,7 @@
 body {
   margin: 0;
   font-family: "Orbitron", Arial, sans-serif;
-  background: linear-gradient(135deg, #d9e0ff, #b8c4ff, hsl(228, 100%, 81%));
+  background: #87CEEB;
   overflow-x: hidden;
 }
 
