@@ -3,17 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dropdown Fix Demo</title>
+  <title>Camp Citizen | Home</title>
 
-  <!-- Orbitron font (futuristic) -->
+  <!-- Futuristic Font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    /* ==== essential CSS, paste into your style.css if you prefer ==== */
-    :root{--accent:#66aaff}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Orbitron",system-ui,Arial; background:linear-gradient(135deg,#d9e0ff,#b8c4ff);height:100vh;overflow-x:hidden}
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-    /* NAVBAR */
-    nav{
-      background:#071f47;color:#fff;display:flex;align-items:center
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="left-group">
+      <div class="logo">Camp Citizen</div>
+
+      <!-- Dropdown button -->
+      <button class="dropdown-button" onclick="toggleDropdown()">Pictures ▼</button>
+    </div>
+  </nav>
+
+  <!-- SLIDING DROPDOWN MENU -->
+  <div id="dropdown-menu" class="dropdown-menu">
+      <p>test</p>
+  </div>
+
+  <!-- GLASS ISLAND -->
+  <div class="island">
+      <h2>Welcome to Camp Citizen!</h2>
+  </div>
+
+  <!-- SCRIPT (MUST be inside body) -->
+  <script>
+  function toggleDropdown() {
+      const menu = document.getElementById("dropdown-menu");
+
+      if (menu.classList.contains("open")) {
+          menu.classList.remove("open");  // slide up
+      } else {
+          menu.classList.add("open");     // slide down
+      }
+  }
+  </script>
+
+</body>
+</html>
