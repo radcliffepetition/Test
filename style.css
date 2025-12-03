@@ -1,19 +1,13 @@
 /* === GLOBAL / FONT === */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
 
-:root {
-  --accent:#66aaff;
-}
-
 * { box-sizing: border-box; }
-html, body { height: 100%; }
 
 body {
   margin: 0;
-  font-family: "Orbitron", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Orbitron", Arial, sans-serif;
   background: linear-gradient(135deg, #d9e0ff, #b8c4ff, hsl(228, 100%, 81%));
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
 /* === NAVBAR === */
@@ -24,105 +18,64 @@ nav {
   align-items: center;
   padding: 12px 25px;
   position: fixed;
-  width: 100%;
   top: 0;
   left: 0;
+  width: 100%;
   z-index: 60;
+}
+
+.left-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .logo {
   font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.6px;
-}
-
-/* === MENU TOGGLE (hidden checkbox) === */
-#menu-toggle {
-  position: absolute;
-  left: -9999px;
 }
 
 /* === DROPDOWN BUTTON === */
-.dropbtn {
+.dropdown-button {
   background: transparent;
-  color: #f8f8f8;
+  border: none;
+  color: white;
   padding: 10px 18px;
   border-radius: 25px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.18s ease;
-  user-select: none;
+  transition: transform 0.18s ease, background 0.18s ease;
 }
 
-.dropbtn:hover {
-  background: #002769;
+.dropdown-button:hover {
+  background: rgba(255,255,255,0.15);
   transform: translateY(-2px);
 }
 
-/* === FULLSCREEN DROPDOWN PANEL === */
-.fullscreen-dropdown {
+/* === SLIDING DROPDOWN MENU === */
+.dropdown-menu {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(10px);
-
+  top: -50vh; /* hidden above screen */
+  left: 0;
+  width: 100%;
+  height: 50vh; /* covers half the screen */
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  transition: top 0.5s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  transform: translateY(-100%);
-  transition: transform 0.35s ease;
-
-  z-index: 50;
-}
-
-/* OPEN STATE — slides down */
-#menu-toggle:checked + .fullscreen-dropdown {
-  transform: translateY(0);
-}
-
-/* === BUTTON WRAPPER INSIDE DROPDOWN === */
-.menu-buttons {
-  width: 90%;
-  max-width: 900px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-
-  opacity: 0;
-  transform: translateY(-40px);
-  transition: 0.4s ease;
-}
-
-/* Animate buttons AFTER dropdown opens */
-#menu-toggle:checked + .fullscreen-dropdown .menu-buttons {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* === BIG SQUARE BUTTONS === */
-.big-btn {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.25);
-  padding: 50px;
-  border-radius: 18px;
-
-  font-size: 28px;
-  text-decoration: none;
   color: white;
-  text-align: center;
-
-  backdrop-filter: blur(12px);
-  transition: 0.2s ease;
+  font-size: 30px;
+  z-index: 55;
 }
 
-.big-btn:hover {
-  background: rgba(255,255,255,0.15);
-  transform: scale(1.02);
+.dropdown-menu.open {
+  top: 60px; /* slides down under navbar */
 }
 
-/* === MAIN CONTENT ISLAND === */
+/* === GLASS ISLAND === */
 .island {
   position: absolute;
   top: 84px;
@@ -131,12 +84,31 @@ nav {
   width: min(90%, 680px);
   padding: 36px;
   text-align: center;
+  border-radius: 18px;
 
   background: rgba(0,0,0,0.5);
   color: white;
-  border-radius: 18px;
 
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  z-index: 30;
+}
+
+.island h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-weight: 700;
+}
+
+/* === MOBILE === */
+@media (max-width: 520px) {
+  .dropdown-button {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+  .island {
+    padding: 28px;
+    top: 78px;
+  }
 }
