@@ -79,10 +79,10 @@ nav {
 .page-section {
   height: 100vh;
   width: 100%;
-  padding-top: 100px; /* Avoid overlap with navbar */
+  padding-top: 140px; /* FULLY pushes content below navbar */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* start at the top after padding */
   align-items: center;
   text-align: center;
 }
