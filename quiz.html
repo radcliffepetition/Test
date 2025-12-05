@@ -1,98 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take the Quiz</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #111;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        nav .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            padding: 10px;
-        }
-
-        .quiz-container {
-            max-width: 700px;
-            margin: 140px auto;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .start-btn, .answer-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin: 12px 0;
-            font-size: 1.2rem;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            cursor: pointer;
-            transition: 0.3s ease;
-            backdrop-filter: blur(6px);
-        }
-
-        .start-btn:hover, .answer-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-3px);
-        }
-
-        /* Slide animations */
-        .slide-out-left {
-            animation: outLeft 0.45s ease forwards;
-        }
-
-        .slide-in-right {
-            animation: inRight 0.45s ease forwards;
-        }
-
-        @keyframes outLeft {
-            0% { opacity: 1; transform: translateX(0); }
-            100% { opacity: 0; transform: translateX(-80px); }
-        }
-
-        @keyframes inRight {
-            0% { opacity: 0; transform: translateX(80px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take the Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body { background: #111; color: white; font-family: 'Orbitron', sans-serif; }
+nav .logo { font-weight: 700; font-size: 1.5rem; padding: 10px; }
+.quiz-container { max-width: 700px; margin: 100px auto; text-align: center; padding: 20px; }
+.start-btn, .answer-btn { display: block; width: 100%; padding: 18px; margin: 12px 0; font-size: 1.2rem; border-radius: 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; transition: 0.3s ease; backdrop-filter: blur(6px); }
+.start-btn:hover, .answer-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-3px); }
+input { padding: 14px; font-size: 1.1rem; width: 80%; border-radius: 10px; margin-bottom: 12px; }
+.slide-out-left { animation: outLeft 0.45s ease forwards; }
+.slide-in-right { animation: inRight 0.45s ease forwards; }
+@keyframes outLeft { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-80px); } }
+@keyframes inRight { 0% { opacity: 0; transform: translateX(80px); } 100% { opacity: 1; transform: translateX(0); } }
+</style>
 </head>
 <body>
 
 <nav>
-    <div class="left-group">
-        <div class="logo">Camp Citizen</div>
-    </div>
+<div class="left-group"><div class="logo">Camp Citizen</div></div>
 </nav>
 
 <div class="quiz-container">
 
-    <!-- Start screen -->
-    <div id="start-screen">
-        <h1>Take the Quiz?</h1>
-        <button class="start-btn" onclick="startQuiz()">START</button>
-    </div>
+<div id="start-screen">
+<h1>Take the Quiz?</h1>
+<button class="start-btn" onclick="startQuiz()">START</button>
+</div>
 
-    <!-- Questions -->
-    <div id="question-screen" style="display:none;">
-        <h1 id="question-text"></h1>
-        <div id="answers"></div>
-    </div>
+<div id="question-screen" style="display:none;">
+<h1 id="question-text"></h1>
+<div id="answers"></div>
+</div>
 
-    <!-- End screen -->
-    <div id="end-screen" style="display:none;">
-        <h1>Quiz Complete!</h1>
-        <div id="final-score"></div>
-    </div>
+<div id="end-screen" style="display:none;">
+<h1>Quiz Submitted!</h1>
+<p>Your answers have been sent for review. You will be approved or denied by staff.</p>
+</div>
 
 </div>
 
@@ -105,12 +52,11 @@ const questions = [
 ];
 
 let currentQuestion = 0;
-let score = 0;
+let userAnswers = [];
 
 function startQuiz() {
     document.getElementById("start-screen").style.display = "none";
-    const qScreen = document.getElementById("question-screen");
-    qScreen.style.display = "block";
+    document.getElementById("question-screen").style.display = "block";
     loadQuestion(true);
 }
 
@@ -120,35 +66,24 @@ function loadQuestion(isFirst = false) {
     const qText = document.getElementById("question-text");
     const answerArea = document.getElementById("answers");
 
-    if (!isFirst) {
-        qScreen.classList.remove("slide-out-left");
-        qScreen.classList.add("slide-in-right");
-    } else {
-        qScreen.classList.remove("slide-in-right", "slide-out-left");
-    }
+    if (!isFirst) { qScreen.classList.remove("slide-out-left"); qScreen.classList.add("slide-in-right"); }
+    else { qScreen.classList.remove("slide-in-right", "slide-out-left"); }
 
     qText.textContent = q.text;
     answerArea.innerHTML = "";
 
     if (q.type === "multiple") {
-        // Multiple choice buttons
         q.answers.forEach((ans, i) => {
             const btn = document.createElement("button");
             btn.textContent = ans;
             btn.className = "answer-btn";
-            btn.onclick = () => answerQuestion(i);
+            btn.onclick = () => answerQuestion(ans);
             answerArea.appendChild(btn);
         });
     } else if (q.type === "text") {
-        // Text input
         const input = document.createElement("input");
         input.type = "text";
         input.placeholder = "Type your answer...";
-        input.style.padding = "14px";
-        input.style.fontSize = "1.1rem";
-        input.style.width = "80%";
-        input.style.borderRadius = "10px";
-        input.style.marginBottom = "12px";
         answerArea.appendChild(input);
 
         const submitBtn = document.createElement("button");
@@ -159,36 +94,24 @@ function loadQuestion(isFirst = false) {
     }
 }
 
-function answerQuestion(choice) {
-    const q = questions[currentQuestion];
+function answerQuestion(answer) {
+    userAnswers.push({ question: questions[currentQuestion].text, answer: answer });
     const qScreen = document.getElementById("question-screen");
     qScreen.classList.remove("slide-in-right");
     qScreen.classList.add("slide-out-left");
 
     setTimeout(() => {
-        if (q.type === "multiple") {
-            if (choice === q.correct) score++;
-        } else if (q.type === "text") {
-            if (choice.trim().toLowerCase() === q.correct.toLowerCase()) score++;
-        }
-
         currentQuestion++;
-
         if (currentQuestion >= questions.length) {
-            endQuiz();
+            // Save answers for staff review
+            localStorage.setItem("latestQuizSubmission", JSON.stringify(userAnswers));
+            document.getElementById("question-screen").style.display = "none";
+            document.getElementById("end-screen").style.display = "block";
         } else {
             qScreen.classList.remove("slide-out-left");
             loadQuestion();
         }
     }, 450);
-}
-
-function endQuiz() {
-    document.getElementById("question-screen").style.display = "none";
-    const endScreen = document.getElementById("end-screen");
-    endScreen.style.display = "block";
-    document.getElementById("final-score").textContent =
-        `You scored ${score} out of ${questions.length}!`;
 }
 </script>
 
