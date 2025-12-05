@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Review</title>
+<style>
+body { background: #222; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+button { padding: 12px 20px; margin: 8px; font-size: 1rem; cursor: pointer; border-radius: 8px; }
+.approve { background: green; color: white; }
+.deny { background: red; color: white; }
+.answer-block { background: #333; padding: 15px; margin: 10px auto; max-width: 600px; border-radius: 8px; text-align: left; }
+</style>
+</head>
+<body>
+<h1>Quiz Submissions</h1>
+<div id="submission"></div>
+
+<script>
+// Load the latest submission
+const submissionData = JSON.parse(localStorage.getItem("latestQuizSubmission")) || [];
+const container = document.getElementById("submission");
+
+if (submissionData.length === 0) {
+    container.innerHTML = "<p>No submissions yet.</p>";
+} else {
+    submissionData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "answer-block";
+        div.innerHTML = `<strong>Q${index+1}: ${item.question}</strong><br>Answer: ${item.answer}`;
+        container.appendChild(div);
+    });
+
+    const approveBtn = document.createElement("button");
+    approveBtn.textContent = "Approve";
+    approveBtn.className = "approve";
+    approveBtn.onclick = () => {
+        document.cookie = "quizApproved=true; path=/; max-age=31536000"; // 1 year
+        alert("Submission approved! Cookie set for user.");
+        container.innerHTML = "<p>Submission approved.</p>";
+    };
+    container.appendChild(approveBtn);
+
+    const denyBtn = document.createElement("button");
+    denyBtn.textContent = "Deny";
+    denyBtn.className = "deny";
+    denyBtn.onclick = () => {
+        alert("Submission denied. No cookie given.");
+        container.innerHTML = "<p>Submission denied.</p>";
+    };
+    container.appendChild(denyBtn);
+}
+</script>
+</body>
+</html>
 
