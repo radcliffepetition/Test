@@ -98,10 +98,10 @@
 
 <script>
 const questions = [
-    { text: "When did you join Star Citizen?", answers: ["Before this group was created", "Before 2020", "In the past 2 years", "When it all began"], correct: 2 },
-    { text: "How much do you know about Star Citizen?", answers: ["Just enough", "Little", "A lot", "Nothing"], correct: 1 },
-    { text: "Question 3:", answers: ["CORRECT", "Incorrect", "Incorrect", "Incorrect"], correct: 0 },
-    { text: "Question 4:", answers: ["Incorrect", "Incorrect", "Incorrect", "CORRECT"], correct: 3 }
+    { text: "When did you join Star Citizen?", answers: ["Before this group was created", "Before 2020", "In the past 2 years", "When it all began"], correct: 2, type: "multiple" },
+    { text: "How much do you know about Star Citizen?", answers: ["Just enough", "Little", "A lot", "Nothing"], correct: 1, type: "multiple" },
+    { text: "What is the main Star Citizen website URL?", correct: "https://robertsspaceindustries.com", type: "text" },
+    { text: "Name one Star Citizen ship manufacturer:", correct: "Anvil", type: "text" }
 ];
 
 let currentQuestion = 0;
@@ -130,22 +130,48 @@ function loadQuestion(isFirst = false) {
     qText.textContent = q.text;
     answerArea.innerHTML = "";
 
-    q.answers.forEach((ans, i) => {
-        const btn = document.createElement("button");
-        btn.textContent = ans;
-        btn.className = "answer-btn";
-        btn.onclick = () => answerQuestion(i);
-        answerArea.appendChild(btn);
-    });
+    if (q.type === "multiple") {
+        // Multiple choice buttons
+        q.answers.forEach((ans, i) => {
+            const btn = document.createElement("button");
+            btn.textContent = ans;
+            btn.className = "answer-btn";
+            btn.onclick = () => answerQuestion(i);
+            answerArea.appendChild(btn);
+        });
+    } else if (q.type === "text") {
+        // Text input
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Type your answer...";
+        input.style.padding = "14px";
+        input.style.fontSize = "1.1rem";
+        input.style.width = "80%";
+        input.style.borderRadius = "10px";
+        input.style.marginBottom = "12px";
+        answerArea.appendChild(input);
+
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "Submit";
+        submitBtn.className = "answer-btn";
+        submitBtn.onclick = () => answerQuestion(input.value);
+        answerArea.appendChild(submitBtn);
+    }
 }
 
 function answerQuestion(choice) {
+    const q = questions[currentQuestion];
     const qScreen = document.getElementById("question-screen");
     qScreen.classList.remove("slide-in-right");
     qScreen.classList.add("slide-out-left");
 
     setTimeout(() => {
-        if (choice === questions[currentQuestion].correct) score++;
+        if (q.type === "multiple") {
+            if (choice === q.correct) score++;
+        } else if (q.type === "text") {
+            if (choice.trim().toLowerCase() === q.correct.toLowerCase()) score++;
+        }
+
         currentQuestion++;
 
         if (currentQuestion >= questions.length) {
