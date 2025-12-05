@@ -193,4 +193,28 @@ nav {
   background: rgba(255,255,255,0.2);
 }
 
+/* UNIVERSAL BUTTON HOVER + TRANSITIONS */
+button,
+a.big-btn,
+.dropdown-link,
+.start-btn,
+.answer-btn {
+  transition: 
+      background 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      opacity 0.25s ease;
+}
+
+button:hover,
+a.big-btn:hover,
+.dropdown-link:hover,
+.start-btn:hover,
+.answer-btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  background: rgba(255,255,255,0.20) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+
 
