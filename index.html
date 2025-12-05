@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Camp Citizen | Home</title>
 
-  <!-- Futuristic Font -->
+  <!-- Futuristic font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
@@ -17,56 +17,32 @@
   <nav>
     <div class="left-group">
       <div class="logo">Camp Citizen</div>
-
-      <!-- Dropdown button -->
-      <button class="dropdown-button" onclick="toggleDropdown()">Join the Club ▼</button>
+      <label class="dropbtn" for="menu-toggle">Menu ▼</label>
     </div>
   </nav>
 
-  <!-- SLIDING DROPDOWN MENU -->
-      <div id="dropdown-menu" class="dropdown-menu">
-  <div class="dropdown-links">
-      <a href="quiz.html" class="dropdown-link">Take the Quiz</a>
+  <!-- CHECKBOX FOR DROPDOWN -->
+  <input type="checkbox" id="menu-toggle">
+
+  <!-- DROPDOWN MENU -->
+  <div class="fullscreen-dropdown">
+    <a href="quiz.html">Take the Quiz</a>
   </div>
-</div>
 
-
-  <!-- SECTION 1: WELCOME -->
-  <section class="page-section section-welcome">
-      <h1>Welcome to the Club!</h1>
-
-     <div class="scroll-hint">
-        <p>Scroll down to see more</p>
-        <div class="arrow">⌄</div>
-    </div>
+  <!-- SECTIONS -->
+  <section class="section" id="welcome">
+    <h1>Welcome to the Club!</h1>
+    <p class="scroll-hint">Scroll down to see more ↓</p>
   </section>
 
-  <!-- SECTION 2: ABOUT US -->
-  <section class="page-section section-about">
-      <h1>About Us</h1>
-      <p class="about-text">
-        Welcome to the Club. We are a group of people who help get new people started playing Star Citizen. We provide you with starting tools, armor, and aUEC to kick you off. We also offer a tour for 39 aUEC.
-      </p>
+  <section class="section" id="about">
+    <h1>About Us</h1>
+    <p>This is where your about info goes.</p>
   </section>
 
-  <!-- SECTION 3: CREDITS -->
-  <section class="page-section section-credits">
-      <p>made by nick</p>
+  <section class="section" id="credits">
+    <h1>Made by Nick</h1>
   </section>
-
-
-  <!-- SCRIPT -->
-  <script>
-  function toggleDropdown() {
-      const menu = document.getElementById("dropdown-menu");
-
-      if (menu.classList.contains("open")) {
-          menu.classList.remove("open");  
-      } else {
-          menu.classList.add("open");     
-      }
-  }
-  </script>
 
 </body>
 </html>
