@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take the Quiz</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            padding: 10px;
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 140px auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-btn, .answer-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin: 12px 0;
+            font-size: 1.2rem;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .start-btn:hover, .answer-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Slide animations */
+        .slide-out-left {
+            animation: outLeft 0.45s ease forwards;
+        }
+
+        .slide-in-right {
+            animation: inRight 0.45s ease forwards;
+        }
+
+        @keyframes outLeft {
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(-80px); }
+        }
+
+        @keyframes inRight {
+            0% { opacity: 0; transform: translateX(80px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="left-group">
+        <div class="logo">Camp Citizen</div>
+    </div>
+</nav>
+
+<div class="quiz-container">
+
+    <!-- Start screen -->
+    <div id="start-screen">
+        <h1>Take the Quiz?</h1>
+        <button class="start-btn" onclick="startQuiz()">START</button>
+    </div>
+
+    <!-- Questions -->
+    <div id="question-screen" style="display:none;">
+        <h1 id="question-text"></h1>
+        <div id="answers"></div>
+    </div>
+
+    <!-- End screen -->
+    <div id="end-screen" style="display:none;">
+        <h1>Quiz Complete!</h1>
+        <div id="final-score"></div>
+    </div>
+
+</div>
+
+<script>
+const questions = [
+    { text: "Question 1:", answers: ["Incorrect", "Incorrect", "CORRECT", "Incorrect"], correct: 2 },
+    { text: "Question 2:", answers: ["Incorrect", "CORRECT", "Incorrect", "Incorrect"], correct: 1 },
+    { text: "Question 3:", answers: ["CORRECT", "Incorrect", "Incorrect", "Incorrect"], correct: 0 },
+    { text: "Question 4:", answers: ["Incorrect", "Incorrect", "Incorrect", "CORRECT"], correct: 3 }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz() {
+    document.getElementById("start-screen").style.display = "none";
+    const qScreen = document.getElementById("question-screen");
+    qScreen.style.display = "block";
+    loadQuestion(true);
+}
+
+function loadQuestion(isFirst = false) {
+    const q = questions[currentQuestion];
+    const qScreen = document.getElementById("question-screen");
+    const qText = document.getElementById("question-text");
+    const answerArea = document.getElementById("answers");
+
+    if (!isFirst) {
+        qScreen.classList.remove("slide-out-left");
+        qScreen.classList.add("slide-in-right");
+    } else {
+        qScreen.classList.remove("slide-in-right", "slide-out-left");
+    }
+
+    qText.textContent = q.text;
+    answerArea.innerHTML = "";
+
+    q.answers.forEach((ans, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = ans;
+        btn.className = "answer-btn";
+        btn.onclick = () => answerQuestion(i);
+        answerArea.appendChild(btn);
+    });
+}
+
+function answerQuestion(choice) {
+    const qScreen = document.getElementById("question-screen");
+    qScreen.classList.remove("slide-in-right");
+    qScreen.classList.add("slide-out-left");
+
+    setTimeout(() => {
+        if (choice === questions[currentQuestion].correct) score++;
+        currentQuestion++;
+
+        if (currentQuestion >= questions.length) {
+            endQuiz();
+        } else {
+            qScreen.classList.remove("slide-out-left");
+            loadQuestion();
+        }
+    }, 450);
+}
+
+function endQuiz() {
+    document.getElementById("question-screen").style.display = "none";
+    const endScreen = document.getElementById("end-screen");
+    endScreen.style.display = "block";
+    document.getElementById("final-score").textContent =
+        `You scored ${score} out of ${questions.length}!`;
+}
+</script>
+
+</body>
+</html>
