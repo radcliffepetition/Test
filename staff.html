@@ -1,90 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Staff Review</title>
 <style>
-  body { background:#111; color:white; font-family: Arial, sans-serif; padding:20px; }
-  .card { background:#222; padding:12px; border-radius:8px; margin-bottom:12px; }
-  button { padding:10px 14px; margin-right:8px; border-radius:8px; border:none; cursor:pointer; }
-  .approve { background:#28a745; color:#fff; }
-  .deny { background:#c0392b; color:#fff; }
-  .small { font-size:0.9rem; color:#ccc; }
+body { background: #222; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+button { padding: 12px 20px; margin: 8px; font-size: 1rem; cursor: pointer; border-radius: 8px; }
+.approve { background: green; color: white; }
+.deny { background: red; color: white; }
+.answer-block { background: #333; padding: 15px; margin: 10px auto; max-width: 600px; border-radius: 8px; text-align: left; }
 </style>
 </head>
 <body>
-  <h1>Pending Submissions</h1>
-  <div id="list"></div>
+<h1>Quiz Submissions</h1>
+<div id="submission"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxu-VTe_D7x24RqtBsnbv-2jsuHGQeXl-2bQ8s-568ZeEvu69UUghjTCEsfZlIj-y6iaw/exec";
+// Load the latest submission
+const submissionData = JSON.parse(localStorage.getItem("latestQuizSubmission")) || [];
+const container = document.getElementById("submission");
 
-async function fetchPending() {
-  const container = document.getElementById("list");
-  container.innerHTML = "<p>Loading...</p>";
-  try {
-    const res = await fetch(API_URL + "?action=getPending");
-    const json = await res.json();
-    if (!json || json.length === 0) {
-      container.innerHTML = "<p>No pending submissions.</p>";
-      return;
-    }
-
-    container.innerHTML = "";
-    json.forEach(sub => {
-      const card = document.createElement("div");
-      card.className = "card";
-      const header = document.createElement("div");
-      header.innerHTML = `<strong>Submission: ${sub.submissionId}</strong> <div class="small">Device: ${sub.deviceID} · ${new Date(sub.timestamp).toLocaleString()}</div>`;
-      card.appendChild(header);
-
-      sub.answers.forEach((a, i) => {
-        const p = document.createElement("p");
-        p.innerHTML = `<strong>Q${i+1}:</strong> ${a.question}<br/><em>Answer:</em> ${a.answer}`;
-        card.appendChild(p);
-      });
-
-      const approve = document.createElement("button");
-      approve.className = "approve";
-      approve.textContent = "Approve";
-      approve.onclick = () => handleDecision(sub.submissionId, true);
-
-      const deny = document.createElement("button");
-      deny.className = "deny";
-      deny.textContent = "Deny";
-      deny.onclick = () => handleDecision(sub.submissionId, false);
-
-      card.appendChild(approve);
-      card.appendChild(deny);
-      container.appendChild(card);
+if (submissionData.length === 0) {
+    container.innerHTML = "<p>No submissions yet.</p>";
+} else {
+    submissionData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "answer-block";
+        div.innerHTML = `<strong>Q${index+1}: ${item.question}</strong><br>Answer: ${item.answer}`;
+        container.appendChild(div);
     });
 
-  } catch (err) {
-    container.innerHTML = "<p>Error loading pending submissions.</p>";
-    console.error(err);
-  }
-}
+    const approveBtn = document.createElement("button");
+    approveBtn.textContent = "Approve";
+    approveBtn.className = "approve";
+    approveBtn.onclick = () => {
+        document.cookie = "quizApproved=true; path=/; max-age=31536000"; // 1 year
+        alert("Submission approved! Cookie set for user.");
+        container.innerHTML = "<p>Submission approved.</p>";
+    };
+    container.appendChild(approveBtn);
 
-async function handleDecision(submissionId, approve) {
-  const confirmMsg = approve ? "Are you sure you want to APPROVE this submission?" : "Are you sure you want to DENY this submission?";
-  if (!confirm(confirmMsg)) return;
-  try {
-    const action = approve ? "approve" : "deny";
-    const res = await fetch(API_URL + "?action=" + action + "&id=" + encodeURIComponent(submissionId), {
-      method: "POST"
-    });
-    const json = await res.json();
-    alert("Done: " + JSON.stringify(json));
-    // refresh
-    fetchPending();
-  } catch (err) {
-    alert("Failed to update: " + err.message);
-  }
+    const denyBtn = document.createElement("button");
+    denyBtn.textContent = "Deny";
+    denyBtn.className = "deny";
+    denyBtn.onclick = () => {
+        alert("Submission denied. No cookie given.");
+        container.innerHTML = "<p>Submission denied.</p>";
+    };
+    container.appendChild(denyBtn);
 }
-
-// initial load
-fetchPending();
 </script>
 </body>
 </html>
+
