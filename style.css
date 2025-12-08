@@ -171,3 +171,8 @@ nav {
   50% { transform: translateY(8px); }
   100% { transform: translateY(0); }
 }
+
+body {
+    cursor: url(Test/turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
+}
+
