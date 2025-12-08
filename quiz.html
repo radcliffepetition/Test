@@ -1,150 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Take the Quiz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { background:#111; color:white; font-family:'Orbitron',sans-serif; }
-    .quiz-container { max-width:700px; margin:100px auto; text-align:center; padding:20px; }
-    button { display:block; width:100%; padding:16px; margin:10px 0; border-radius:12px; background:rgba(255,255,255,0.12); color:white; border:1px solid rgba(255,255,255,0.18); cursor:pointer; }
-    input[type="text"] { width:100%; padding:12px; border-radius:8px; margin:12px 0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take the Quiz</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { background:#111; color:white; font-family:'Orbitron',sans-serif; }
+
+        nav .logo { font-weight:700; font-size:1.5rem; padding:10px; }
+
+        .quiz-container {
+            max-width:700px; margin:140px auto; text-align:center; padding:20px;
+        }
+
+        .start-btn, .answer-btn, .submit-written {
+            display:block; width:100%; padding:18px; margin:12px 0;
+            font-size:1.2rem; border-radius:14px;
+            background:rgba(255,255,255,0.15);
+            border:1px solid rgba(255,255,255,0.2);
+            color:white; cursor:pointer; transition:0.3s ease;
+            backdrop-filter:blur(6px);
+        }
+
+        .start-btn:hover, .answer-btn:hover, .submit-written:hover {
+            background:rgba(255,255,255,0.3); transform:translateY(-3px);
+        }
+
+        input[type="text"] {
+            width:100%; padding:12px; border-radius:10px;
+            border:none; margin-top:15px; font-size:1.1rem;
+        }
+
+        /* Slide animations */
+        .slide-out-left { animation: outLeft .45s ease forwards; }
+        .slide-in-right { animation: inRight .45s ease forwards; }
+
+        @keyframes outLeft {
+            0%{opacity:1; transform:translateX(0);}
+            100%{opacity:0; transform:translateX(-80px);}
+        }
+        @keyframes inRight {
+            0%{opacity:0; transform:translateX(80px);}
+            100%{opacity:1; transform:translateX(0);}
+        }
+    </style>
 </head>
+
 <body>
-  <div class="quiz-container">
+
+<nav>
+    <div class="left-group">
+        <div class="logo">Camp Citizen</div>
+    </div>
+</nav>
+
+<div class="quiz-container">
+
     <div id="start-screen">
-      <h1>Take the Quiz?</h1>
-      <button id="startBtn">START</button>
+        <h1>Take the Quiz?</h1>
+        <button class="start-btn" onclick="startQuiz()">START</button>
     </div>
 
     <div id="question-screen" style="display:none;">
-      <h2 id="question-text"></h2>
-      <div id="answers"></div>
+        <h1 id="question-text"></h1>
+        <div id="answers"></div>
     </div>
 
     <div id="end-screen" style="display:none;">
-      <h2>Submitted</h2>
-      <p>Your submission has been sent for review.</p>
-      <p id="status-label"></p>
+        <h1>Quiz Complete!</h1>
+        <p>Your response has been sent for review.</p>
     </div>
-  </div>
+
+</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxu-VTe_D7x24RqtBsnbv-2jsuHGQeXl-2bQ8s-568ZeEvu69UUghjTCEsfZlIj-y6iaw/exec";
-
 const questions = [
-  { text: "When did you join Star Citizen?", type: "multiple", answers: ["Before this group was created","Before 2020","In the past 2 years","When it all began"] },
-  { text: "How much do you know about Star Citizen?", type: "multiple", answers: ["Just enough","Little","A lot","Nothing"] },
-  { text: "Why do you want to join?", type: "written" },
-  { text: "What can you bring to the group?", type: "written" }
+    { 
+        text: "When did you join Star Citizen?", 
+        type: "multiple",
+        answers: ["Before this group was created", "Before 2020", "In the past 2 years", "When it all began"]
+    },
+    { 
+        text: "How much do you know about Star Citizen?",
+        type: "multiple",
+        answers: ["Just enough", "Little", "A lot", "Nothing"]
+    },
+    { 
+        text: "Why do you want to join?", 
+        type: "written" 
+    },
+    { 
+        text: "What can you bring to the group?", 
+        type: "written"
+    }
 ];
-
-let deviceID = localStorage.getItem("deviceID_v1");
-if (!deviceID) {
-  deviceID = 'dev-' + (Date.now().toString(36)) + '-' + Math.random().toString(36).slice(2,8);
-  localStorage.setItem("deviceID_v1", deviceID);
-}
 
 let currentQuestion = 0;
 let responses = [];
 
-document.getElementById("startBtn").addEventListener("click", () => {
-  document.getElementById("start-screen").style.display = "none";
-  document.getElementById("question-screen").style.display = "block";
-  loadQuestion();
-  // check if already approved and set cookie
-  checkApprovalAndSetCookie();
-});
+function startQuiz() {
+    document.getElementById("start-screen").style.display = "none";
+    const qScreen = document.getElementById("question-screen");
+    qScreen.style.display = "block";
+    loadQuestion(true);
+}
 
-function loadQuestion() {
-  const q = questions[currentQuestion];
-  const qText = document.getElementById("question-text");
-  const answerArea = document.getElementById("answers");
-  qText.textContent = q.text;
-  answerArea.innerHTML = "";
+function loadQuestion(isFirst=false) {
+    const q = questions[currentQuestion];
+    const qScreen = document.getElementById("question-screen");
+    const qText = document.getElementById("question-text");
+    const answerArea = document.getElementById("answers");
 
-  if (q.type === "multiple") {
-    q.answers.forEach(ans => {
-      const btn = document.createElement("button");
-      btn.textContent = ans;
-      btn.onclick = () => submitAnswer(ans);
-      answerArea.appendChild(btn);
-    });
-  } else {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.id = "writtenAnswer";
-    input.placeholder = "Type your answer...";
-    answerArea.appendChild(input);
+    if (!isFirst) {
+        qScreen.classList.remove("slide-out-left");
+        qScreen.classList.add("slide-in-right");
+    }
 
-    const submit = document.createElement("button");
-    submit.textContent = "Submit";
-    submit.onclick = () => {
-      const val = document.getElementById("writtenAnswer").value.trim();
-      if (!val) return alert("Please enter an answer.");
-      submitAnswer(val);
-    };
-    answerArea.appendChild(submit);
-  }
+    qText.textContent = q.text;
+    answerArea.innerHTML = "";
+
+    if (q.type === "multiple") {
+        q.answers.forEach(ans => {
+            const btn = document.createElement("button");
+            btn.textContent = ans;
+            btn.className = "answer-btn";
+            btn.onclick = () => submitAnswer(ans);
+            answerArea.appendChild(btn);
+        });
+    }
+
+    if (q.type === "written") {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Type your answer...";
+        input.id = "writtenInput";
+        answerArea.appendChild(input);
+
+        const submit = document.createElement("button");
+        submit.textContent = "Submit Answer";
+        submit.className = "submit-written";
+        submit.onclick = () => {
+            const val = document.getElementById("writtenInput").value.trim();
+            if (val === "") return alert("Please type something.");
+            submitAnswer(val);
+        };
+        answerArea.appendChild(submit);
+    }
 }
 
 function submitAnswer(answer) {
-  responses.push({ question: questions[currentQuestion].text, answer: answer });
-  currentQuestion++;
-  if (currentQuestion >= questions.length) {
-    // submit to Google Script
-    sendSubmission();
-  } else {
-    loadQuestion();
-  }
+    responses.push({
+        question: questions[currentQuestion].text,
+        answer: answer
+    });
+
+    const qScreen = document.getElementById("question-screen");
+    qScreen.classList.remove("slide-in-right");
+    qScreen.classList.add("slide-out-left");
+
+    setTimeout(() => {
+        currentQuestion++;
+
+        if (currentQuestion >= questions.length) {
+            finishQuiz();
+        } else {
+            loadQuestion();
+        }
+    }, 450);
 }
 
-async function sendSubmission() {
-  try {
-    const body = {
-      deviceID: deviceID,
-      submissionId: undefined,
-      answers: responses
-    };
-    const res = await fetch(API_URL + "?action=submit", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" }
-    });
-    const json = await res.json();
+function finishQuiz() {
+    localStorage.setItem("latestQuizSubmission", JSON.stringify(responses));
+
     document.getElementById("question-screen").style.display = "none";
     document.getElementById("end-screen").style.display = "block";
-    // check approval status (in case staff already approved)
-    setTimeout(checkApprovalAndSetCookie, 1000);
-  } catch (err) {
-    alert("Error submitting: " + err.message);
-  }
 }
-
-async function checkApprovalAndSetCookie() {
-  try {
-    const res = await fetch(API_URL + "?action=status&deviceID=" + encodeURIComponent(deviceID));
-    const json = await res.json();
-    if (json.approved) {
-      // set cookie
-      document.cookie = "quizApproved=true; path=/; max-age=" + 60*60*24*365;
-      document.getElementById("status-label").textContent = "Status: Approved — cookie set for this browser.";
-    } else if (json.denied) {
-      document.getElementById("status-label").textContent = "Status: Denied.";
-    } else {
-      document.getElementById("status-label").textContent = "Status: Pending review.";
-    }
-  } catch (err) {
-    console.warn("status check failed", err);
-  }
-}
-
-// On page load if you want to auto-check status and set cookie:
-window.addEventListener("load", () => {
-  checkApprovalAndSetCookie();
-});
 </script>
+
 </body>
 </html>
