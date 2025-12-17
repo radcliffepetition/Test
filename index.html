@@ -68,28 +68,30 @@
   }
   </script>
 
-  <!-- Futuristic Background Lines -->
+  <!-- Futuristic Background Overlay -->
 <style>
-  .futuristic-bg {
+  .bg-overlay {
     position: fixed;
     inset: 0;
-    z-index: -1;
     pointer-events: none;
+    z-index: 9999;
+
     background:
       linear-gradient(
         90deg,
-        rgba(0, 150, 255, 0.08) 1px,
+        rgba(0, 150, 255, 0.12) 1px,
         transparent 1px
       ),
       linear-gradient(
-        rgba(0, 150, 255, 0.08) 1px,
+        rgba(0, 150, 255, 0.12) 1px,
         transparent 1px
       );
+
     background-size: 40px 40px;
-    animation: bgMove 20s linear infinite;
+    animation: overlayMove 25s linear infinite;
   }
 
-  @keyframes bgMove {
+  @keyframes overlayMove {
     from {
       background-position: 0 0, 0 0;
     }
@@ -99,7 +101,8 @@
   }
 </style>
 
-<div class="futuristic-bg"></div>
+<div class="bg-overlay"></div>
+
 
 
 </body>
