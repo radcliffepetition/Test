@@ -207,6 +207,6 @@ button.futuristic-hover:hover::before {
 }
 
 body {
-    cursor: url(turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
+    cursor: url('turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
 }
 
