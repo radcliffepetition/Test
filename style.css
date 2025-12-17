@@ -47,44 +47,9 @@ nav {
   transition: transform 0.18s ease, background 0.18s ease;
 }
 
-button.futuristic-hover {
-  position: relative;
-  background: transparent;
-  color: #4fc3ff;
-  border: none;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
-  padding: 0 12px;
-  height: var(--nav-height, 64px); /* same as navbar */
-  line-height: var(--nav-height, 64px);
-  z-index: 1;
-  overflow: hidden;
-  transition: color 0.3s ease;
-}
-
-/* outline box effect */
-button.futuristic-hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 0;
-  height: 100%;
-  border: 2px solid #4fc3ff;
-  transform: translateX(-50%);
-  transition: width 0.3s ease;
-  pointer-events: none;
-}
-
-/* on hover expand the box to text width */
-button.futuristic-hover:hover::before {
-  width: 100%;
-}
-
-/* optional: glow effect */
-button.futuristic-hover:hover::before {
-  box-shadow: 0 0 8px #4fc3ff, 0 0 12px #4fc3ff;
+.dropdown-button:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
 }
 
 /* === SLIDING DROPDOWN MENU === */
@@ -208,6 +173,5 @@ button.futuristic-hover:hover::before {
 }
 
 body {
-    cursor: url('turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
+    cursor: url(turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
 }
-
