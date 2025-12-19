@@ -1,66 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login Page</title>
-  <!-- Add Firebase SDK -->
+  <meta charset="UTF-8">
+  <title>Login</title>
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
 
-  <script>
-    // Initialize Firebase with your project's config
-    var firebaseConfig = {
-   apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
-  authDomain: "gggg-2095f.firebaseapp.com",
-  projectId: "gggg-2095f",
-  storageBucket: "gggg-2095f.firebasestorage.app",
-  messagingSenderId: "1047765928516",
-  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
-  measurementId: "G-HYZ2GQZ0GW"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #0a3d62, #020c1b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+    }
+
+    .login-card {
+      width: 360px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(0, 170, 255, 0.25);
+      text-align: center;
+      position: relative;
+    }
+
+    .login-card h1 {
+      margin-bottom: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .input-group label {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 170, 255, 0.4);
+      border-radius: 8px;
+      color: white;
+      outline: none;
+      font-family: 'Orbitron', sans-serif;
+      transition: border 0.25s, box-shadow 0.25s;
+    }
+
+    .input-group input:focus {
+      border-color: #4fc3ff;
+      box-shadow: 0 0 10px #4fc3ff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: linear-gradient(90deg, #1e90ff, #00c3ff);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(0, 195, 255, 0.8);
+    }
+
+    .error {
+      margin-top: 16px;
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      min-height: 18px;
+    }
+  </style>
 
   <script>
-    // Function to check if a user is logged in or not
+    // Firebase config
+    var firebaseConfig = {
+      apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
+      authDomain: "gggg-2095f.firebaseapp.com",
+      projectId: "gggg-2095f",
+      storageBucket: "gggg-2095f.firebasestorage.app",
+      messagingSenderId: "1047765928516",
+      appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
+      measurementId: "G-HYZ2GQZ0GW"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
     function checkAuthState() {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          // User is signed in, proceed to the website
           window.location.href = "index.html";
-        } else {
-          // No user is signed in, stay on the login page
         }
       });
     }
 
-    // Function to handle the login form submission
     function login() {
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("password").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorBox = document.getElementById("error");
+
+      errorBox.textContent = "";
 
       firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(function() {
-          // Login successful, redirect to the homepage
+        .then(() => {
           window.location.href = "index.html";
         })
-        .catch(function(error) {
-          // Handle errors here
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log("Login error:", errorCode, errorMessage);
+        .catch((error) => {
+          if (error.code === "auth/user-not-found") {
+            errorBox.textContent = "Could not find account";
+          } else if (error.code === "auth/wrong-password") {
+            errorBox.textContent = "Incorrect password";
+          } else {
+            errorBox.textContent = "Login failed. Please try again.";
+          }
         });
     }
   </script>
 </head>
+
 <body onload="checkAuthState()">
-  <h1>Login Page</h1>
-  <form>
-    <label for="email">Email:</label>
-    <input type="email" id="email" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" required><br><br>
-    <button type="button" onclick="login()">Login</button>
-  </form>
+
+  <div class="login-card">
+    <h1>LOGIN</h1>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="email" required>
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" required>
+    </div>
+
+    <button onclick="login()">Sign In</button>
+
+    <div id="error" class="error"></div>
+  </div>
+
 </body>
 </html>
-
