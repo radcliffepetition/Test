@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <!-- Add Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+
+  <script>
+    // Initialize Firebase with your project's config
+    var firebaseConfig = {
+   apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
+  authDomain: "gggg-2095f.firebaseapp.com",
+  projectId: "gggg-2095f",
+  storageBucket: "gggg-2095f.firebasestorage.app",
+  messagingSenderId: "1047765928516",
+  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
+  measurementId: "G-HYZ2GQZ0GW"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    // Function to check if a user is logged in or not
+    function checkAuthState() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in, proceed to the website
+          window.location.href = "index.html";
+        } else {
+          // No user is signed in, stay on the login page
+        }
+      });
+    }
+
+    // Function to handle the login form submission
+    function login() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function() {
+          // Login successful, redirect to the homepage
+          window.location.href = "index.html";
+        })
+        .catch(function(error) {
+          // Handle errors here
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log("Login error:", errorCode, errorMessage);
+        });
+    }
+  </script>
+</head>
+<body onload="checkAuthState()">
+  <h1>Login Page</h1>
+  <form>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required><br><br>
+    <button type="button" onclick="login()">Login</button>
+  </form>
+</body>
+</html>
+
