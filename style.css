@@ -189,11 +189,6 @@ nav {
   opacity: 0.9;
 }
 
-
-body {
-    cursor: url(turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
-}
-
 .news-button {
   background: transparent;                    
   border: 1px solid rgba(0, 255, 255, 0.4);   
