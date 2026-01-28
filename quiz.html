@@ -78,30 +78,18 @@
 
 <script type="module">
 
+// ================= QUIZ QUESTIONS =================
 const questions = [
-    { 
-        text: "When did you join Star Citizen?", 
-        type: "multiple",
-        answers: ["Before this group was created", "Before 2020", "In the past 2 years", "When it all began"]
-    },
-    { 
-        text: "How much do you know about Star Citizen?",
-        type: "multiple",
-        answers: ["Just enough", "Little", "A lot", "Nothing"]
-    },
-    { 
-        text: "Why do you want to join?", 
-        type: "written" 
-    },
-    { 
-        text: "What can you bring to the group?", 
-        type: "written"
-    }
+    { text: "When did you join Star Citizen?", type: "multiple", answers: ["Before this group was created", "Before 2020", "In the past 2 years", "When it all began"] },
+    { text: "How much do you know about Star Citizen?", type: "multiple", answers: ["Just enough", "Little", "A lot", "Nothing"] },
+    { text: "Why do you want to join?", type: "written" },
+    { text: "What can you bring to the group?", type: "written" }
 ];
 
 let currentQuestion = 0;
 let responses = [];
 
+// ================= QUIZ FUNCTIONS =================
 function startQuiz() {
     document.getElementById("start-screen").style.display = "none";
     const qScreen = document.getElementById("question-screen");
@@ -153,58 +141,38 @@ function loadQuestion(isFirst=false) {
 }
 
 function submitAnswer(answer) {
-    responses.push({
-        question: questions[currentQuestion].text,
-        answer: answer
-    });
-
+    responses.push({ question: questions[currentQuestion].text, answer: answer });
     const qScreen = document.getElementById("question-screen");
     qScreen.classList.remove("slide-in-right");
     qScreen.classList.add("slide-out-left");
 
     setTimeout(() => {
         currentQuestion++;
-
-        if (currentQuestion >= questions.length) {
-            finishQuiz();
-        } else {
-            loadQuestion();
-        }
+        if (currentQuestion >= questions.length) finishQuiz();
+        else loadQuestion();
     }, 450);
 }
 
-function finishQuiz() {
-    localStorage.setItem("latestQuizSubmission", JSON.stringify(responses));
-
-    document.getElementById("question-screen").style.display = "none";
-    document.getElementById("end-screen").style.display = "block";
-}
-
-// === FIREBASE IMPORTS ===
+// ================= FIREBASE IMPORTS =================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// === YOUR FIREBASE CONFIG ===
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
   authDomain: "gggg-2095f.firebaseapp.com",
   projectId: "gggg-2095f",
-  storageBucket: "gggg-2095f.firebasestorage.app",
+  storageBucket: "gggg-2095f.appspot.com",
   messagingSenderId: "1047765928516",
   appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
   measurementId: "G-HYZ2GQZ0GW"
 };
 
-// === INIT FIREBASE ===
+// ================= FIREBASE INIT =================
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// === OVERRIDE finishQuiz ===
+// ================= FINISH QUIZ =================
 async function finishQuiz() {
     try {
         await addDoc(collection(db, "quizSubmissions"), {
@@ -224,8 +192,7 @@ async function finishQuiz() {
     }
 }
 
-
-<script type="module">
+</script>
 
 </body>
 </html>
