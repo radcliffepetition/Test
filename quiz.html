@@ -178,7 +178,53 @@ function finishQuiz() {
     document.getElementById("question-screen").style.display = "none";
     document.getElementById("end-screen").style.display = "block";
 }
-</script>
+
+// === FIREBASE IMPORTS ===
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// === YOUR FIREBASE CONFIG ===
+const firebaseConfig = {
+  apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
+  authDomain: "gggg-2095f.firebaseapp.com",
+  projectId: "gggg-2095f",
+  storageBucket: "gggg-2095f.firebasestorage.app",
+  messagingSenderId: "1047765928516",
+  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
+  measurementId: "G-HYZ2GQZ0GW"
+};
+
+// === INIT FIREBASE ===
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// === OVERRIDE finishQuiz ===
+async function finishQuiz() {
+    try {
+        await addDoc(collection(db, "quizSubmissions"), {
+            responses: responses,
+            submittedAt: serverTimestamp(),
+            approved: false
+        });
+
+        document.getElementById("question-screen").style.display = "none";
+        document.getElementById("end-screen").style.display = "block";
+
+        console.log("Saved to Firestore ✅");
+
+    } catch (error) {
+        alert("Firestore error: " + error.message);
+        console.error(error);
+    }
+}
+
+
+<script type="module">
 
 </body>
 </html>
