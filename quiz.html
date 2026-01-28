@@ -1,52 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take the Quiz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take the Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body { background:#111; color:white; font-family:'Orbitron',sans-serif; }
 
-    <style>
-        body { background:#111; color:white; font-family:'Orbitron',sans-serif; }
+nav .logo { font-weight:700; font-size:1.5rem; padding:10px; }
 
-        nav .logo { font-weight:700; font-size:1.5rem; padding:10px; }
+.quiz-container { max-width:700px; margin:140px auto; text-align:center; padding:20px; }
 
-        .quiz-container {
-            max-width:700px; margin:140px auto; text-align:center; padding:20px;
-        }
+.start-btn, .answer-btn, .submit-written {
+    display:block; width:100%; padding:18px; margin:12px 0;
+    font-size:1.2rem; border-radius:14px;
+    background:rgba(255,255,255,0.15);
+    border:1px solid rgba(255,255,255,0.2);
+    color:white; cursor:pointer; transition:0.3s ease;
+    backdrop-filter:blur(6px);
+}
 
-        .start-btn, .answer-btn, .submit-written {
-            display:block; width:100%; padding:18px; margin:12px 0;
-            font-size:1.2rem; border-radius:14px;
-            background:rgba(255,255,255,0.15);
-            border:1px solid rgba(255,255,255,0.2);
-            color:white; cursor:pointer; transition:0.3s ease;
-            backdrop-filter:blur(6px);
-        }
+.start-btn:hover, .answer-btn:hover, .submit-written:hover {
+    background:rgba(255,255,255,0.3); transform:translateY(-3px);
+}
 
-        .start-btn:hover, .answer-btn:hover, .submit-written:hover {
-            background:rgba(255,255,255,0.3); transform:translateY(-3px);
-        }
+input[type="text"] {
+    width:100%; padding:12px; border-radius:10px;
+    border:none; margin-top:15px; font-size:1.1rem;
+}
 
-        input[type="text"] {
-            width:100%; padding:12px; border-radius:10px;
-            border:none; margin-top:15px; font-size:1.1rem;
-        }
+/* Slide animations */
+.slide-out-left { animation: outLeft .45s ease forwards; }
+.slide-in-right { animation: inRight .45s ease forwards; }
 
-        /* Slide animations */
-        .slide-out-left { animation: outLeft .45s ease forwards; }
-        .slide-in-right { animation: inRight .45s ease forwards; }
+@keyframes outLeft {
+    0%{opacity:1; transform:translateX(0);}
+    100%{opacity:0; transform:translateX(-80px);}
+}
 
-        @keyframes outLeft {
-            0%{opacity:1; transform:translateX(0);}
-            100%{opacity:0; transform:translateX(-80px);}
-        }
-        @keyframes inRight {
-            0%{opacity:0; transform:translateX(80px);}
-            100%{opacity:1; transform:translateX(0);}
-        }
-    </style>
+@keyframes inRight {
+    0%{opacity:0; transform:translateX(80px);}
+    100%{opacity:1; transform:translateX(0);}
+}
+</style>
 </head>
 
 <body>
@@ -158,11 +156,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // ================= FIREBASE CONFIG =================
+// 🔴 REPLACE THIS WITH YOUR CONFIG FROM FIREBASE CONSOLE
 const firebaseConfig = {
   apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
   authDomain: "gggg-2095f.firebaseapp.com",
   projectId: "gggg-2095f",
-  storageBucket: "gggg-2095f.appspot.com",
+  storageBucket: "gggg-2095f.firebasestorage.app",
   messagingSenderId: "1047765928516",
   appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
   measurementId: "G-HYZ2GQZ0GW"
@@ -184,7 +183,7 @@ async function finishQuiz() {
         document.getElementById("question-screen").style.display = "none";
         document.getElementById("end-screen").style.display = "block";
 
-        console.log("Saved to Firestore ✅");
+        console.log("Quiz saved to Firestore ✅");
 
     } catch (error) {
         alert("Firestore error: " + error.message);
