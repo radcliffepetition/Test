@@ -193,3 +193,23 @@ nav {
 body {
     cursor: url(turquoise-futuristic-arrow-3D-custom-cursor.png'), auto;
 }
+
+.news-button {
+  margin-left: 20px;
+  font-weight: 700;
+  color: #00f; /* bright blue */
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  background: rgba(0, 255, 255, 0.05);
+  cursor: pointer;
+  transition: 0.3s ease, transform 0.3s ease;
+}
+
+.news-button:hover {
+  background: rgba(0, 255, 255, 0.15);
+  transform: translateY(-3px);
+  color: #0ff; /* neon hover effect */
+}
+
