@@ -13,11 +13,59 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-body { background: #111; color: white; font-family: 'Orbitron', sans-serif; padding: 40px; text-align: center; }
-h1 { margin-bottom: 30px; font-weight: 700; }
-.news-post { background: #222; padding: 20px; margin: 20px auto; max-width: 700px; border-radius: 12px; text-align: left; box-shadow: 0 0 15px #00f; transition: 0.3s; }
-.news-post h2 { margin: 0 0 10px 0; font-size: 1.5rem; color: #00f; }
-.news-post p { margin: 5px 0; }
+body {
+  background: #111;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px;
+  margin: 0;
+}
+h1 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 30px;
+  font-size: 3rem;
+  color: #00f;
+}
+
+/* News container */
+#news-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Each post card */
+.news-post {
+  background: #222;
+  padding: 20px;
+  margin: 20px 0;
+  max-width: 700px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 0 20px #00f60f;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideIn 0.6s forwards;
+}
+.news-post h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.6rem;
+  color: #00f;
+}
+.news-post p {
+  margin: 5px 0;
+  line-height: 1.4;
+}
+.news-post small {
+  color: #0ff;
+  font-size: 0.8rem;
+}
+
+/* Slide in animation */
+@keyframes slideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
 </style>
 </head>
 <body>
@@ -26,7 +74,7 @@ h1 { margin-bottom: 30px; font-weight: 700; }
 <div id="news-container">Loading news...</div>
 
 <script>
-  // Firebase config (same as your project)
+  // Firebase config (same as your homepage)
   var firebaseConfig = {
     apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
     authDomain: "gggg-2095f.firebaseapp.com",
@@ -41,24 +89,33 @@ h1 { margin-bottom: 30px; font-weight: 700; }
 
   const newsContainer = document.getElementById('news-container');
 
-  // Fetch news from Firestore
-  db.collection("news").orderBy("postedAt", "desc").get().then((querySnapshot) => {
+  // Fetch news from the "news" collection
+  db.collection("news").orderBy("postedAt", "desc").get()
+    .then((querySnapshot) => {
       newsContainer.innerHTML = '';
-      if(querySnapshot.empty) {
-          newsContainer.innerHTML = "<p>No news yet.</p>";
+      if (querySnapshot.empty) {
+        newsContainer.innerHTML = "<p>No news yet.</p>";
       } else {
-          querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              const div = document.createElement('div');
-              div.className = 'news-post';
-              div.innerHTML = `<h2>${data.title}</h2><p>${data.content}</p><p style="font-size:0.8rem; color:#888;">Posted: ${data.postedAt?.toDate().toLocaleString() || ''}</p>`;
-              newsContainer.appendChild(div);
-          });
+        let delay = 0;
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement('div');
+          div.className = 'news-post';
+          div.style.animationDelay = delay + 's'; // stagger slide-in
+          div.innerHTML = `
+            <h2>${data.title}</h2>
+            <p>${data.content}</p>
+            <small>Posted: ${data.postedAt?.toDate().toLocaleString() || ''}</small>
+          `;
+          newsContainer.appendChild(div);
+          delay += 0.15; // stagger effect
+        });
       }
-  }).catch((err) => {
+    })
+    .catch((err) => {
       newsContainer.innerHTML = "<p>Error loading news.</p>";
       console.error(err);
-  });
+    });
 </script>
 
 </body>
