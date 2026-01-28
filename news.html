@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camp Citizen News</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+
+<!-- Futuristic font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+body { background: #111; color: white; font-family: 'Orbitron', sans-serif; padding: 40px; text-align: center; }
+h1 { margin-bottom: 30px; font-weight: 700; }
+.news-post { background: #222; padding: 20px; margin: 20px auto; max-width: 700px; border-radius: 12px; text-align: left; box-shadow: 0 0 15px #00f; transition: 0.3s; }
+.news-post h2 { margin: 0 0 10px 0; font-size: 1.5rem; color: #00f; }
+.news-post p { margin: 5px 0; }
+</style>
+</head>
+<body>
+
+<h1>Club News</h1>
+<div id="news-container">Loading news...</div>
+
+<script>
+  // Firebase config (same as your project)
+  var firebaseConfig = {
+    apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
+    authDomain: "gggg-2095f.firebaseapp.com",
+    projectId: "gggg-2095f",
+    storageBucket: "gggg-2095f.firebasestorage.app",
+    messagingSenderId: "1047765928516",
+    appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
+    measurementId: "G-HYZ2GQZ0GW"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+
+  const newsContainer = document.getElementById('news-container');
+
+  // Fetch news from Firestore
+  db.collection("news").orderBy("postedAt", "desc").get().then((querySnapshot) => {
+      newsContainer.innerHTML = '';
+      if(querySnapshot.empty) {
+          newsContainer.innerHTML = "<p>No news yet.</p>";
+      } else {
+          querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const div = document.createElement('div');
+              div.className = 'news-post';
+              div.innerHTML = `<h2>${data.title}</h2><p>${data.content}</p><p style="font-size:0.8rem; color:#888;">Posted: ${data.postedAt?.toDate().toLocaleString() || ''}</p>`;
+              newsContainer.appendChild(div);
+          });
+      }
+  }).catch((err) => {
+      newsContainer.innerHTML = "<p>Error loading news.</p>";
+      console.error(err);
+  });
+</script>
+
+</body>
+</html>
