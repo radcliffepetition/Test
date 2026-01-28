@@ -213,3 +213,7 @@ body {
   color: #0ff;                               
 }
 
+body{
+  cursor: url("cursor.png) , auto;
+}
+
