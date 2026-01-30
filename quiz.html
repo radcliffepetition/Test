@@ -90,8 +90,17 @@ input[type="text"] {
 
     <div id="start-screen">
         <h1>Take the Quiz?</h1>
-        <button class="start-btn" onclick="startQuiz()">START</button>
+    <button class="start-btn" onclick="showNotice()">START</button>
     </div>
+
+  <div id="notice-screen" style="display:none;">
+    <h1>Before You Start</h1>
+    <p style="margin:20px 0; line-height:1.6;">
+        Please note that this quiz has no right or wrong answers.<br>
+        Just try your best and answer honestly.
+    </p>
+    <button class="start-btn" onclick="confirmStart()">OK</button>
+</div>
 
     <div id="question-screen" style="display:none;">
         <h1 id="question-text"></h1>
@@ -255,6 +264,19 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 </script>
+
+  <script>
+function showNotice() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("notice-screen").style.display = "block";
+}
+
+function confirmStart() {
+    document.getElementById("notice-screen").style.display = "none";
+    startQuiz(); // calls your existing quiz logic
+}
+</script>
+
 
 
 </body>
