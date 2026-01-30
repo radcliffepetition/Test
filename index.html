@@ -7,6 +7,31 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
 
+  <script>
+    // Initialize Firebase with your project's config
+    var firebaseConfig = {
+    apiKey: "AIzaSyD4bDMS9X_HqSDa-2qVTZKNNsXVVA1A1A4",
+  authDomain: "gggg-2095f.firebaseapp.com",
+  projectId: "gggg-2095f",
+  storageBucket: "gggg-2095f.firebasestorage.app",
+  messagingSenderId: "1047765928516",
+  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
+  measurementId: "G-HYZ2GQZ0GW"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Function to check if a user is logged in or not
+    function checkAuthState() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+          // User is not signed in, redirect to the login page
+          window.location.href = "login.html";
+        }
+      });
+    }
+  </script>
+</head>
+<body onload="checkAuthState()">
 
 
 //Website code starts here//
