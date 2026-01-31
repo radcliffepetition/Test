@@ -4,29 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Staff Review</title>
+
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <style>
-body { background: #111; color: white; font-family: 'Orbitron', sans-serif; text-align: center; padding: 40px; }
-h1 { font-weight: 700; margin-bottom: 30px; }
-button { padding: 12px 20px; margin: 8px; font-size: 1rem; cursor: pointer; border-radius: 8px; border: none; transition: 0.3s; }
+body {
+    background: #111;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    padding: 40px;
+}
+
+h1 { margin-bottom: 30px; }
+
+.submission-block {
+    background: #222;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 700px;
+    border-radius: 14px;
+    text-align: left;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+
+button {
+    padding: 12px 20px;
+    margin: 8px 6px 0 0;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
 button:hover { transform: translateY(-2px); }
-.approve { background: #00ff88; color: black; font-weight: 600; }
-.deny { background: #ff5555; color: black; font-weight: 600; }
-.submission-block { background: #222; padding: 20px; margin: 15px auto; max-width: 700px; border-radius: 12px; text-align: left; box-shadow: 0 0 15px #00f; transition: 0.3s; }
-.submission-block h3 { margin: 0 0 10px 0; }
-.submission-block p { margin: 5px 0; }
+
+.approve {
+    background: #00ff88;
+    color: black;
+    font-weight: 600;
+}
+
+.deny {
+    background: #ff5555;
+    color: black;
+    font-weight: 600;
+}
 </style>
 </head>
 <body>
 
-
-
 <h1>Quiz Submissions</h1>
 <div id="submissionsContainer">Loading submissions...</div>
+
+<script>
+// ================= EMAILJS INIT =================
+emailjs.init("rK3VxKe5ekdl_Tg0u"); // <-- REPLACE
+</script>
 
 <script type="module">
 // ================= FIREBASE IMPORTS =================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+    doc,
+    updateDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // ================= FIREBASE CONFIG =================
 const firebaseConfig = {
@@ -35,77 +84,104 @@ const firebaseConfig = {
   projectId: "gggg-2095f",
   storageBucket: "gggg-2095f.firebasestorage.app",
   messagingSenderId: "1047765928516",
-  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11",
-  measurementId: "G-HYZ2GQZ0GW"
+  appId: "1:1047765928516:web:6fe090e104b7bf735a8a11"
 };
 
-// ================= FIREBASE INIT =================
+// ================= INIT FIREBASE =================
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ================= LOAD PENDING SUBMISSIONS =================
 const submissionsContainer = document.getElementById("submissionsContainer");
 
+// ================= LOAD SUBMISSIONS =================
 async function loadSubmissions() {
     submissionsContainer.innerHTML = "Loading submissions...";
 
-    try {
-        // 🔹 Only fetch submissions where approved == false (pending)
-        const q = query(collection(db, "quizSubmissions"), where("approved", "==", false));
-        const querySnapshot = await getDocs(q);
+    const q = query(
+        collection(db, "quizSubmissions"),
+        where("approved", "==", false)
+    );
 
-        submissionsContainer.innerHTML = "";
+    const snapshot = await getDocs(q);
+    submissionsContainer.innerHTML = "";
 
-        if (querySnapshot.empty) {
-            submissionsContainer.innerHTML = "<p>No submissions yet.</p>";
-            return;
-        }
+    if (snapshot.empty) {
+        submissionsContainer.innerHTML = "<p>No pending submissions.</p>";
+        return;
+    }
 
-        querySnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const block = document.createElement("div");
-            block.className = "submission-block";
+    snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
 
-            block.innerHTML = `<h3>Submission ID: ${docSnap.id}</h3>`;
+        const block = document.createElement("div");
+        block.className = "submission-block";
 
-            data.responses.forEach((resp, idx) => {
-                block.innerHTML += `<p><strong>Q${idx+1}: ${resp.question}</strong><br>Answer: ${resp.answer}</p>`;
-            });
+        block.innerHTML = `
+            <h3>Email: ${data.email || "No email"}</h3>
+        `;
 
-            const approveBtn = document.createElement("button");
-            approveBtn.textContent = "Approve";
-            approveBtn.className = "approve";
-            approveBtn.onclick = async () => {
-                await updateDoc(doc(db, "quizSubmissions", docSnap.id), { approved: true });
-                block.style.backgroundColor = "#004400";
-                block.innerHTML += "<p>✅ Approved</p>";
-                block.querySelectorAll("button").forEach(btn => btn.disabled = true);
-            };
-            block.appendChild(approveBtn);
-
-            const denyBtn = document.createElement("button");
-            denyBtn.textContent = "Deny";
-            denyBtn.className = "deny";
-            denyBtn.onclick = async () => {
-                await updateDoc(doc(db, "quizSubmissions", docSnap.id), { approved: false });
-                block.style.backgroundColor = "#440000";
-                block.innerHTML += "<p>❌ Denied</p>";
-                block.querySelectorAll("button").forEach(btn => btn.disabled = true);
-            };
-            block.appendChild(denyBtn);
-
-            submissionsContainer.appendChild(block);
+        data.responses.forEach((r, i) => {
+            block.innerHTML += `
+                <p><strong>Q${i+1}:</strong> ${r.question}<br>
+                <em>${r.answer}</em></p>
+            `;
         });
 
-    } catch (err) {
-        submissionsContainer.innerHTML = `<p>Error loading submissions: ${err.message}</p>`;
-        console.error(err);
-    }
+        // ===== APPROVE BUTTON =====
+        const approveBtn = document.createElement("button");
+        approveBtn.className = "approve";
+        approveBtn.textContent = "Approve";
+
+        approveBtn.onclick = async () => {
+            if (!data.email) {
+                alert("No email found for this submission.");
+                return;
+            }
+
+            try {
+                // SEND EMAIL
+                await emailjs.send(
+                    "service_h1n8cxl",   // <-- REPLACE
+                    "template_gx4hm3f",  // <-- REPLACE
+                    {
+                        to_email: data.email
+                    }
+                );
+
+                // UPDATE FIRESTORE
+                await updateDoc(doc(db, "quizSubmissions", docSnap.id), {
+                    approved: true
+                });
+
+                block.remove(); // remove from page instantly
+
+            } catch (err) {
+                alert("Error sending email.");
+                console.error(err);
+            }
+        };
+
+        // ===== DENY BUTTON =====
+        const denyBtn = document.createElement("button");
+        denyBtn.className = "deny";
+        denyBtn.textContent = "Deny";
+
+        denyBtn.onclick = async () => {
+            await updateDoc(doc(db, "quizSubmissions", docSnap.id), {
+                approved: true
+            });
+            block.remove();
+        };
+
+        block.appendChild(approveBtn);
+        block.appendChild(denyBtn);
+        submissionsContainer.appendChild(block);
+    });
 }
 
-// Load submissions when page opens
+// LOAD ON PAGE OPEN
 loadSubmissions();
-
 </script>
+
 </body>
 </html>
